@@ -4,7 +4,7 @@ The personal website, blog, portfolio, podcast archive, and newsletter for Jeffr
 
 ## Requirements
 
-- PHP 8.4 or newer with SQLite and GD support
+- PHP 8.5 or newer with SQLite and GD support
 - Composer
 - Node.js 22 and npm
 
