@@ -5,9 +5,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <x-home.section-header
             class="credibility-heading"
-            eyebrow="Client perspective"
-            title="Trusted when the codebase matters"
-            description="Clear thinking, candid communication, and implementation that holds up after handoff."
+            title="From the people I've worked with"
         />
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
@@ -27,7 +25,7 @@
         </div>
 
         <div class="mt-8 text-center">
-            <a href="{{ route('testimonials.create') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-600 dark:text-brand-300 dark:decoration-brand-700 dark:hover:text-brand-200">
+            <a href="{{ route('testimonials.create') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-200 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-white">
                 Worked with me? Share your experience
                 <span aria-hidden="true">→</span>
             </a>

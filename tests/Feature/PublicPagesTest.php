@@ -285,7 +285,6 @@ it('renders canonical structured data for project case studies', function () {
             'keywords' => 'Laravel, Pest',
             'sameAs' => [
                 $project->url,
-                $project->github_url,
             ],
         ])
         ->and(collect($structuredData['@graph'])->pluck('@type'))
@@ -609,7 +608,7 @@ it('keeps public technology and channel details consistent', function () {
     $this->get(route('home'))
         ->assertOk()
         ->assertSee(config('public-site.youtube.url'), false)
-        ->assertSee('Watch, listen, and build along');
+        ->assertSee('Away from the editor');
 });
 
 it('places the mobile uses jump navigation before the equipment list', function () {
@@ -658,8 +657,8 @@ it('loads public interactivity and typography from the local Vite bundle', funct
         ->assertSee($manifest['resources/images/home-hero-desktop-1536.webp']['file'], false)
         ->assertSee($manifest['resources/images/home-hero-mobile-640.webp']['file'], false)
         ->assertSee($manifest['resources/images/home-hero-mobile-1024.webp']['file'], false)
-        ->assertSee($manifest['resources/images/podcast-coffee-logo-128.webp']['file'], false)
-        ->assertDontSee($manifest['resources/images/podcast-coffee-logo-512.webp']['file'], false)
+        ->assertSee($manifest['resources/images/podcast-coffee-logo-320.webp']['file'], false)
+        ->assertSee($manifest['resources/images/podcast-coffee-logo-512.webp']['file'], false)
         ->assertSee($manifest['resources/js/app.js']['file'], false);
 
     $this->get(route('about'))
@@ -708,20 +707,18 @@ it('loads public interactivity and typography from the local Vite bundle', funct
         ->not->toContain('Empera-Regular.ttf');
 });
 
-it('renders an accessible homepage architecture scene with a static fallback', function () {
+it('renders one concise client-focused services section', function () {
     $content = $this->get(route('home'))
         ->assertOk()
-        ->assertSee('data-architecture-scene', false)
-        ->assertSee('aria-labelledby="architecture-title architecture-description"', false)
-        ->assertSee('data-architecture-fallback', false)
-        ->assertSee('Request', false)
-        ->assertSee('Domain', false)
-        ->assertSee('Data', false)
+        ->assertSee('Where I can help')
+        ->assertSee('Make change easier')
+        ->assertSee('Move your product forward')
+        ->assertSee('Modernize without starting over')
+        ->assertDontSee('data-architecture-scene', false)
+        ->assertDontSee('How I can help')
         ->getContent();
 
-    expect(substr_count($content, 'data-architecture-scene'))->toBe(1)
-        ->and($content)->not->toContain('id="code-editor"')
-        ->and($content)->not->toContain('role="tablist"');
+    expect(substr_count($content, 'data-home-services'))->toBe(1);
 });
 
 it('prioritizes the art-directed homepage hero', function () {
@@ -976,8 +973,8 @@ it('presents published projects as case studies without inferring product status
 
     $this->get(route('projects.show', $project))
         ->assertOk()
-        ->assertSee('Project case study')
-        ->assertSee('Decisions over decoration')
+        ->assertSee('Project overview')
+        ->assertSee('Discuss a similar project')
         ->assertSee('The challenge')
         ->assertDontSee('Active');
 });

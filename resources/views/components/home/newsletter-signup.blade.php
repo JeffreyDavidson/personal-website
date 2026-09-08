@@ -12,7 +12,7 @@
     </div>
     @endif
     @error('email')
-    <div class="mx-auto mb-4 max-w-md rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400" role="alert" aria-live="assertive">
+    <div id="newsletter-email-error" class="mx-auto mb-4 max-w-md rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400" role="alert" aria-live="assertive">
         {{ $message }}
     </div>
     @enderror
@@ -23,12 +23,15 @@
         </div>
         <label for="newsletter-email" class="sr-only">Email address</label>
         <input id="newsletter-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email"
+            value="{{ old('email') }}"
+            aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
+            aria-describedby="{{ $errors->has('email') ? 'newsletter-email-error newsletter-privacy' : 'newsletter-privacy' }}"
             class="newsletter-input min-w-0 flex-1 rounded-lg border border-brand-200 bg-white px-4 py-3 text-base text-gray-900 shadow-sm transition-colors placeholder:text-gray-400 dark:border-brand-700/50 dark:bg-brand-800 dark:text-white dark:shadow-none dark:placeholder:text-gray-500 sm:text-sm">
         <button type="submit" class="rounded-lg bg-brand-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-500 sm:text-sm">
             Subscribe
         </button>
     </form>
-    <p class="mx-auto mt-3 max-w-md text-xs text-gray-600 dark:text-gray-400">
+    <p id="newsletter-privacy" class="mx-auto mt-3 max-w-md text-xs text-gray-600 dark:text-gray-400">
         Confirmation is required. See the <a href="{{ route('privacy') }}" class="underline decoration-gray-300 underline-offset-2 transition-colors hover:text-brand-600 dark:decoration-gray-700 dark:hover:text-brand-300">privacy notice</a> for how your email is handled.
     </p>
 </div>

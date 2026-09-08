@@ -1,180 +1,103 @@
 @extends('layouts.app')
 
-@push('head')
-    @vite('resources/css/pages/listings-entry.css')
-@endpush
-
 @section('content')
-<header class="border-b border-gray-200 bg-white dark:border-[#1e2a3a] dark:bg-[#0b1016]">
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        {{-- Breadcrumb --}}
-        <nav aria-label="Breadcrumb" class="mb-8 flex items-center gap-2 text-sm text-gray-500">
-            <a href="{{ route('projects.index') }}" class="hover:text-gray-900 dark:hover:text-gray-300 transition-colors">Projects</a>
-            <x-svg-icon name="chevron-right" class="w-3.5 h-3.5 text-gray-600" />
-            <span aria-current="page" class="text-gray-600 dark:text-gray-400">{{ $project->title }}</span>
-        </nav>
-
-        <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
-            <div class="flex-1 min-w-0">
-                <div class="mb-5 flex flex-wrap items-center gap-3">
-                    <span class="rounded-full border border-brand-600/20 bg-brand-600/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-brand-600">Project case study</span>
-                    @if($project->is_featured)
-                        <span class="rounded-full border border-accent-400/30 bg-accent-400/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#7f334d] dark:text-accent-400">Featured work</span>
-                    @endif
-                </div>
-
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 leading-tight text-gray-900 dark:text-white">{{ $project->title }}</h1>
-                <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8 max-w-3xl">{{ $project->description }}</p>
-
-                {{-- Action buttons --}}
-                <div class="flex flex-wrap gap-3">
+<article data-project-detail>
+    <section class="border-b border-gray-200 bg-white py-10 dark:border-brand-800 dark:bg-brand-950 sm:py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <nav aria-label="Breadcrumb" class="mb-10">
+                <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-2 rounded py-2 text-sm font-medium text-brand-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500 dark:text-brand-300">
+                    <x-heroicon-o-arrow-long-left class="size-5 shrink-0" aria-hidden="true" />
+                    All projects
+                </a>
+            </nav>
+            <div class="grid gap-6 lg:grid-cols-2 lg:gap-16">
+                <h1 class="min-w-0 break-words text-balance text-4xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">{{ $project->title }}</h1>
+                <div>
+                    <p class="max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-300 sm:text-xl">{{ $project->description }}</p>
                     @if($project->url)
-                    <x-button href="{{ $project->url }}" target="_blank" rel="noopener noreferrer" class="link-btn">
-                        <x-svg-icon name="external-link" class="w-4 h-4" />
-                        Visit the project
-                    </x-button>
-                    @endif
-                    @if($project->github_url)
-                    <x-button variant="outline" href="{{ $project->github_url }}" target="_blank" rel="noopener noreferrer" class="link-btn hover:border-gray-500">
-                        <x-svg-icon name="github" class="w-4 h-4" />
-                        Explore the code
-                    </x-button>
+                        <a href="{{ $project->url }}" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 rounded py-2 text-sm font-semibold text-brand-700 underline underline-offset-4 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500 dark:text-brand-300 dark:hover:text-white">
+                            Visit the project<span class="sr-only"> (opens in a new tab)</span>
+                            <x-heroicon-o-arrow-up-right class="size-4 shrink-0" aria-hidden="true" />
+                        </a>
                     @endif
                 </div>
             </div>
 
-            <aside aria-label="Project details" class="w-full flex-shrink-0 space-y-6 lg:w-80">
-                <x-projects.sidebar-card title="Project brief">
-                    <dl class="space-y-4 text-sm">
-                        <div class="flex items-center justify-between gap-4">
-                            <dt class="text-gray-500">Format</dt>
-                            <dd class="font-medium text-gray-800 dark:text-gray-200">Case study</dd>
-                        </div>
-                        <div class="flex items-center justify-between gap-4">
-                            <dt class="text-gray-500">Code</dt>
-                            <dd class="font-medium text-gray-800 dark:text-gray-200">{{ $project->github_url ? 'Available' : 'Private' }}</dd>
-                        </div>
-                        <div class="flex items-center justify-between gap-4">
-                            <dt class="text-gray-500">Product</dt>
-                            <dd class="font-medium text-gray-800 dark:text-gray-200">{{ $project->url ? 'Live link' : 'Build notes' }}</dd>
-                        </div>
-                    </dl>
-                </x-projects.sidebar-card>
-
-                @if($project->tech_stack)
-                <x-projects.sidebar-card title="Tech Stack">
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($project->tech_stack as $tech)
-                        <x-projects.tech-pill :label="$tech" />
-                        @endforeach
-                    </div>
-                </x-projects.sidebar-card>
-                @endif
-
-                @if($project->tags->count())
-                <x-projects.sidebar-card title="Topics">
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($project->tags as $tag)
-                        <x-projects.topic-pill :label="$tag->name" />
-                        @endforeach
-                    </div>
-                </x-projects.sidebar-card>
-                @endif
-
-                @if($project->url || $project->github_url)
-                <x-projects.sidebar-card title="Links">
-                    <div class="space-y-3">
-                        @if($project->url)
-                        <x-projects.detail-link :href="$project->url" icon="globe" :label="parse_url($project->url, PHP_URL_HOST)" />
+            @if($project->featured_image_url)
+                @inject('projectImages', 'App\Services\ResponsiveImageVariants')
+                @php
+                    $featuredImageSrcset = $projectImages->srcset($project->featured_image_path);
+                @endphp
+                <div class="mt-10 overflow-hidden rounded-xl bg-gray-50 dark:bg-brand-900 sm:mt-14">
+                    <picture>
+                        @if($featuredImageSrcset)
+                            <source type="image/webp" srcset="{{ $featuredImageSrcset }}" sizes="(min-width: 1280px) 1216px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)">
                         @endif
-                        @if($project->github_url)
-                        <x-projects.detail-link :href="$project->github_url" icon="github" :label="str_replace('https://github.com/', '', $project->github_url)" />
-                        @endif
-                    </div>
-                </x-projects.sidebar-card>
-                @endif
-            </aside>
-        </div>
-    </div>
-</header>
-
-{{-- ===== FEATURED IMAGE ===== --}}
-@if($project->featured_image_url)
-@inject('projectImages', 'App\Services\ResponsiveImageVariants')
-@php
-    $featuredImageSrcset = $projectImages->srcset($project->featured_image_path);
-@endphp
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mb-8 relative z-10">
-    <div class="mt-[-2rem] aspect-video overflow-hidden rounded-2xl border border-gray-200 shadow-2xl dark:border-brand-700">
-        <picture class="block h-full">
-            @if($featuredImageSrcset)
-            <source
-                type="image/webp"
-                srcset="{{ $featuredImageSrcset }}"
-                sizes="(min-width: 1280px) 1216px, calc(100vw - 2rem)"
-            >
+                        <img src="{{ $project->featured_image_url }}" alt="{{ $project->title }}" decoding="async" fetchpriority="high" class="aspect-video w-full object-contain">
+                    </picture>
+                </div>
             @endif
-            <img src="{{ $project->featured_image_url }}" alt="{{ $project->title }}" decoding="async" fetchpriority="high" class="h-full w-full object-cover">
-        </picture>
-    </div>
-</div>
-@endif
-
-<section class="bg-gray-50 dark:bg-[#0b1016]">
-    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:px-8">
-        <div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">Behind the build</p>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Decisions over decoration</h2>
-            <p class="mt-3 text-sm leading-relaxed text-gray-500">The product context, technical choices, constraints, and lessons that shaped this work.</p>
         </div>
+    </section>
 
-        <div>
-        @if($project->content)
-            <x-prose class="prose-headings:font-extrabold prose-h2:mt-12 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gray-200 prose-h2:pb-3 prose-h2:text-2xl prose-h2:first:mt-0 prose-a:no-underline prose-code:font-mono prose-code:text-accent-400 prose-pre:border prose-pre:border-gray-200 prose-pre:bg-gray-50 prose-li:text-gray-600 prose-p:text-gray-600 prose-strong:text-gray-800 hover:prose-a:underline dark:prose-h2:border-brand-700 dark:prose-pre:border-brand-700 dark:prose-pre:bg-brand-950 dark:prose-li:text-gray-400 dark:prose-p:text-gray-400 dark:prose-strong:text-gray-200">
-                {!! Str::markdown($project->content) !!}
-            </x-prose>
-        @else
-            <div class="rounded-2xl border border-gray-200 bg-white px-6 py-12 text-center dark:border-brand-700 dark:bg-brand-950/50">
-                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600/10">
-                    <x-svg-icon name="document" class="h-8 w-8 text-brand-600" />
-                </div>
-                <p class="mb-2 text-lg font-medium text-gray-600 dark:text-gray-400">Detailed write-up coming soon</p>
-                <p class="text-sm text-gray-500">Check back later for a full breakdown of the architecture and decisions behind this project.</p>
-            </div>
-        @endif
-        </div>
-    </div>
-</section>
-
-{{-- ===== MORE PROJECTS ===== --}}
-@if($otherProjects->count())
-<section class="border-t border-gray-200 dark:border-brand-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-        <div class="mb-8 flex items-end justify-between gap-6">
+    <section aria-labelledby="project-overview" class="py-12 sm:py-16">
+        <div class="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16 lg:px-8">
             <div>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">Keep exploring</p>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">More project stories</h2>
+                <h2 id="project-overview" class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Project overview</h2>
+                @if($project->tech_stack)
+                    <div class="mt-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Built with</h3>
+                        <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                            @foreach($project->tech_stack as $tech)
+                                <li>{{ $tech }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if($project->tags->isNotEmpty())
+                    <div class="mt-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Areas of focus</h3>
+                        <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                            @foreach($project->tags as $tag)
+                                <li>{{ $tag->name }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
-            <a href="{{ route('projects.index') }}" class="hidden items-center gap-2 text-sm font-semibold text-brand-600 hover:underline sm:inline-flex">
-                All projects
-                <x-svg-icon name="arrow-long-right" class="h-4 w-4" />
-            </a>
+            <div class="min-w-0">
+                @if($project->content)
+                    <x-prose class="break-words prose-headings:font-semibold prose-h2:mt-10 prose-h2:text-2xl prose-h3:text-xl prose-p:leading-8 prose-pre:overflow-x-auto [&_h2:first-child]:mt-0 [&_img]:rounded-xl">
+                        {!! Str::markdown($project->content) !!}
+                    </x-prose>
+                @else
+                    <p class="text-lg leading-8 text-gray-600 dark:text-gray-400">Want to know more about this project? Get in touch to discuss the work and how it relates to what you’re building.</p>
+                @endif
+            </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            @foreach($otherProjects as $other)
-            <x-projects.related-card :project="$other" />
-            @endforeach
+    </section>
+</article>
+
+<section aria-labelledby="project-contact-heading" class="border-y border-gray-200 bg-gray-50 py-10 dark:border-brand-800 dark:bg-brand-900/30 sm:py-14">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div>
+            <h2 id="project-contact-heading" class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-3xl">Have a similar challenge?</h2>
+            <p class="mt-3 text-base leading-7 text-gray-600 dark:text-gray-400">Tell me what you’re building, what needs to change, or where you’re stuck.</p>
         </div>
+        <a href="{{ route('contact') }}" class="w-fit shrink-0 rounded-lg bg-[#356d9f] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2b5b87] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500">Discuss a similar project</a>
     </div>
 </section>
-@else
-<section class="border-t border-gray-200 dark:border-brand-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 transition-colors">
-            <x-svg-icon name="chevron-left" class="w-4 h-4" />
-            Back to all projects
-        </a>
-    </div>
-</section>
+
+@if($otherProjects->isNotEmpty())
+    <section aria-labelledby="related-projects-heading" class="py-12 sm:py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 id="related-projects-heading" class="mb-8 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">More selected work</h2>
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                @foreach($otherProjects as $other)
+                    <x-projects.related-card :project="$other" />
+                @endforeach
+            </div>
+        </div>
+    </section>
 @endif
 @endsection
