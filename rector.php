@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Rector\Set\PestSetList;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
@@ -11,10 +10,6 @@ return RectorConfig::configure()
         __DIR__.'/database/factories',
         __DIR__.'/database/seeders',
         __DIR__.'/routes',
-        __DIR__.'/tests',
     ])
     ->withPhpSets()
-    ->withComposerBased(laravel: true)
-    ->withSets([
-        PestSetList::CODING_STYLE,
-    ]);
+    ->withComposerBased(laravel: true);
