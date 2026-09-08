@@ -13,6 +13,7 @@
 ## Testing
 
 - Use `jasonmccreary/double` for test doubles. Do not introduce direct Mockery mocks or Laravel facade spies; swap a Double-backed contract into the container or facade instead.
+- Prefer Pest expectation chaining as recommended by `Pest\Rector\Rules\ChainExpectCallsRector`, including `->and()` for different values. This overrides the global preference for separate method-call lines where it conflicts with the rule. Do not disable expectation chaining solely to preserve existing test formatting; use Pint for final formatting and preserve test behavior.
 
 ## Releases
 

@@ -81,6 +81,7 @@
             "vendor/bin/pest"
         ],
         "test:filament": "vendor/bin/filacheck --detailed",
+        "test:rector": "vendor/bin/rector process --dry-run --no-progress-bar",
         "test:types": "vendor/bin/phpstan analyse --memory-limit=1G --no-progress --error-format=table",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
