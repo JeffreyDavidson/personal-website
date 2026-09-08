@@ -46,3 +46,56 @@ it('renders responsive project images without overflow', function (string $route
         ->assertScript('Math.abs(document.querySelector("main picture img").getBoundingClientRect().width / document.querySelector("main picture img").getBoundingClientRect().height - 16 / 9) < 0.02')
         ->assertNoJavaScriptErrors();
 })->with(['projects.index', 'projects.show'])->with(['mobile', 'desktop']);
+
+it('keeps image-free projects navigable', function (string $device) {
+    $this->withVite();
+
+    $project = Project::query()->create([
+        'title' => 'A project without a screenshot',
+        'description' => 'Practical software built around a client’s needs.',
+        'is_featured' => false,
+        'status' => ProjectStatus::Published,
+    ]);
+
+    $page = visit(route('projects.index', absolute: false))
+        ->on()
+        ->{$device}();
+
+    $page = $page->assertSeeIn('#more-projects-heading', 'More projects')
+        ->assertCount('[data-project-entry]', 1)
+        ->assertCount('[data-project-entry] img', 0)
+        ->assertScript('document.documentElement.scrollWidth <= document.documentElement.clientWidth');
+
+    $page->click($project->title);
+
+    $page->assertSeeIn('#main-content h1', $project->title)
+        ->assertCount('[data-project-detail] img', 0)
+        ->assertSee('Want to know more about this project?')
+        ->assertScript('document.documentElement.scrollWidth <= document.documentElement.clientWidth')
+        ->assertNoJavaScriptErrors();
+
+    $page->click('All projects');
+
+    $page->assertSeeIn('#main-content h1', 'Selected projects');
+})->with(['mobile', 'desktop']);
+
+it('offers contact when there are no published projects', function (string $device) {
+    $this->withVite();
+
+    Project::query()->create([
+        'title' => 'Unpublished client project',
+        'description' => 'Not ready for the portfolio.',
+        'status' => ProjectStatus::Draft,
+    ]);
+
+    $page = visit(route('projects.index', absolute: false))
+        ->on()
+        ->{$device}();
+
+    $page->assertSee('Project details aren’t available here yet.')
+        ->assertDontSee('Unpublished client project')
+        ->assertCount('[data-project-entry]', 0)
+        ->assertAttribute('section[aria-labelledby="projects-contact-heading"] a', 'href', route('contact'))
+        ->assertScript('document.documentElement.scrollWidth <= document.documentElement.clientWidth')
+        ->assertNoJavaScriptErrors();
+})->with(['mobile', 'desktop']);
