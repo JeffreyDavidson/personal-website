@@ -48,7 +48,7 @@ it('builds a page-aware podcast payload', function () {
         ->and($data['podcast']->is($podcast))->toBeTrue()
         ->and($data['episodes']->currentPage())->toBe(2)
         ->and($data['episodes']->total())->toBe(21)
-        ->and($data['episodes']->getCollection()->modelKeys())->toBe([
+        ->and($data['episodes']->getCollection()->map(fn (Episode $episode) => $episode->getKey())->all())->toBe([
             Episode::query()->where('slug', 'architecture-session-21')->value('id'),
         ])
         ->and($data['episodes']->every(
