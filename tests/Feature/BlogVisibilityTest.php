@@ -4,10 +4,12 @@ use App\Enums\PublishStatus;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+/** @param array<string, mixed> $overrides */
 function createBlogPost(array $overrides = []): Post
 {
     $user = User::query()->create([
@@ -76,5 +78,13 @@ it('counts only published posts in blog categories', function () {
 
     $this->get(route('blog.index'))
         ->assertOk()
-        ->assertViewHas('categories', fn ($categories) => $categories->sole()->posts_count === 1);
+        ->assertViewHas('categories', function (mixed $categories): bool {
+            if (! $categories instanceof Collection) {
+                return false;
+            }
+
+            $category = $categories->sole();
+
+            return $category instanceof Category && $category->getAttribute('posts_count') === 1;
+        });
 });
