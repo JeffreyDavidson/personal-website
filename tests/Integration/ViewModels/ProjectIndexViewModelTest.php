@@ -4,7 +4,6 @@ use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\ViewModels\ProjectIndexViewModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 uses(RefreshDatabase::class);
 
@@ -42,5 +41,5 @@ it('builds the public project index payload', function () {
         ->and($data['projects']->every(
             fn (Project $project): bool => $project->relationLoaded('tags'),
         ))->toBeTrue()
-        ->and($data['seoSource'])->toBeInstanceOf(SEOData::class);
+        ->and($data['seoSource']->title)->toBe('Projects');
 });
