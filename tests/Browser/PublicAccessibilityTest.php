@@ -60,7 +60,7 @@ it('announces testimonial validation once and associates field errors', function
         ->assertNoJavaScriptErrors();
 });
 
-it('uses valid description-list source order for project statistics', function () {
+it('gives project entries a heading and a labeled technology list', function () {
     Project::query()->create([
         'title' => 'Architecture Decisions',
         'slug' => 'architecture-decisions',
@@ -72,8 +72,10 @@ it('uses valid description-list source order for project statistics', function (
 
     $page = visit(route('projects.index', absolute: false));
 
-    $page->assertCount('dl > div', 3)
-        ->assertScript('Array.from(document.querySelectorAll("dl > div")).every((item) => item.children[0]?.tagName === "DT" && item.children[1]?.tagName === "DD")')
+    $page->assertCount('[data-project-entry]', 1)
+        ->assertSeeIn('[data-project-entry] h3', 'Architecture Decisions')
+        ->assertAttribute('[data-project-entry] ul', 'aria-label', 'Technologies used for Architecture Decisions')
+        ->assertCount('[data-project-entry] ul > li', 2)
         ->assertNoJavaScriptErrors();
 });
 

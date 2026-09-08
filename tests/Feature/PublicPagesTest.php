@@ -685,7 +685,7 @@ it('loads public interactivity and typography from the local Vite bundle', funct
         ->assertOk()
         ->assertDontSee('x-data=', false)
         ->assertSee($manifest['resources/css/app.css']['file'], false)
-        ->assertSee($manifest['resources/css/pages/listings-entry.css']['file'], false)
+        ->assertDontSee($manifest['resources/css/pages/listings-entry.css']['file'], false)
         ->assertDontSee($manifest['resources/css/pages/about-entry.css']['file'], false)
         ->assertDontSee($manifest['resources/css/pages/home-entry.css']['file'], false)
         ->assertDontSee($manifest['resources/css/pages/podcast-entry.css']['file'], false);
@@ -967,8 +967,8 @@ it('presents published projects as case studies without inferring product status
 
     $this->get(route('projects.index'))
         ->assertOk()
-        ->assertSee('Laravel case studies, not just screenshots')
-        ->assertSee('Read the case study')
+        ->assertSee('Selected projects')
+        ->assertSee('Explore the project')
         ->assertSee($project->title);
 
     $this->get(route('projects.show', $project))
