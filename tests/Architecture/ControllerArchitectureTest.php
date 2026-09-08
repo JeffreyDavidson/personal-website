@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 $controllerClasses = function (): array {
-    $directory = dirname(__DIR__, 4).'/app/Http/Controllers';
+    $directory = dirname(__DIR__, 2).'/app/Http/Controllers';
 
     return collect(File::allFiles($directory))
         ->map(function (SplFileInfo $file) use ($directory): string {
