@@ -28,13 +28,14 @@
         "spatie/laravel-tags": "^4.11"
     },
     "require-dev": {
+        "driftingly/rector-laravel": "^2.6",
         "fakerphp/faker": "^1.23",
         "jasonmccreary/double": "^0.6.1",
         "larastan/larastan": "^3.8",
         "laravel/boost": "^2.0",
         "laravel/pail": "^1.2.5",
+        "laravel/pao": "^1.1",
         "laravel/pint": "^1.27",
-        "laravel/sail": "^1.53",
         "laraveldaily/filacheck": "^1.1",
         "laraveldaily/filacheck-pro": "^1.1",
         "mockery/mockery": "^1.6",
@@ -49,7 +50,8 @@
         "pestphp/pest-plugin-rector": "^5.0",
         "pestphp/pest-plugin-type-coverage": "^5.0",
         "phpstan/extension-installer": "^1.4",
-        "phpunit/phpunit": "^13.0"
+        "phpunit/phpunit": "^13.0",
+        "rector/rector": "^2.6"
     },
     "autoload": {
         "psr-4": {
