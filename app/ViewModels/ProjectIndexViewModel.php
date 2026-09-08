@@ -23,7 +23,7 @@ class ProjectIndexViewModel
                 ->get(),
             'seoSource' => new SEOData(
                 title: 'Projects',
-                description: 'Open source projects and side projects by Jeffrey Davidson — including Ringside, Campus Sync, and more built with Laravel.',
+                description: 'Explore projects by Jeffrey Davidson: the products, the problems they solve, and the work behind them, built with Laravel.',
             ),
         ];
     }

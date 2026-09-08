@@ -49,6 +49,8 @@ Public interaction modules live in `resources/js`, shared presentation rules liv
 
 Public project pages present summaries, optional screenshots, authored write-ups, and contact links. Project repository URLs remain available in admin records but are not rendered as public links or included in project JSON-LD. Editors should also avoid inserting private repository URLs into public descriptions, write-ups, or website-link fields. The general author GitHub profile link is independent of project repository visibility.
 
+The projects index separates featured and additional projects using the shared `projects.index-entry` Blade component, styled entirely with Tailwind utilities. Entries show existing screenshots with available responsive variants, or use a text-only layout without fabricated fallback imagery. An empty-state message and the persistent contact section keep the page useful when no projects are published.
+
 Generated post OG images are cached on the private local filesystem. Cache validity is based on the rendered title, category name, and an explicit renderer version; deleting a post removes its cached image.
 
 The Filament panel is available at `/admin`. Panel admission requires the native `is_admin` flag, resource actions are protected by Laravel policies, and app-based multi-factor authentication is required in production.
