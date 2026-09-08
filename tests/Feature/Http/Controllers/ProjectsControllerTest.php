@@ -6,6 +6,29 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+it('keeps repository URLs out of public project markup and structured data', function (?string $website) {
+    $project = Project::query()->create([
+        'title' => 'Private repository project',
+        'description' => 'Public case study, private source.',
+        'github_url' => 'https://github.com/example/confidential-repository',
+        'url' => $website,
+        'status' => ProjectStatus::Published,
+    ]);
+
+    $response = $this->get(route('projects.show', $project));
+
+    $response->assertOk()
+        ->assertDontSee('confidential-repository', false)
+        ->assertDontSee('Explore the code')
+        ->assertSee('Discuss a similar project');
+
+    if ($website !== null) {
+        $response->assertSee($website, false);
+    }
+
+    expect($project->fresh()->github_url)->toBe('https://github.com/example/confidential-repository');
+})->with([null, 'https://example.com/product']);
+
 it('loads only the related projects displayed on a project page', function () {
     $project = Project::query()->create([
         'title' => 'Current Project',

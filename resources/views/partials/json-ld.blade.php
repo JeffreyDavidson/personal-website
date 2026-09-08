@@ -172,7 +172,6 @@ if (request()->routeIs('projects.show') && isset($project)) {
 
     $relatedUrls = array_values(array_filter([
         $project->url,
-        $project->github_url,
     ]));
 
     if ($relatedUrls !== []) {

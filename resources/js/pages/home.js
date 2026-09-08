@@ -53,48 +53,8 @@ function initializeRevealAnimations(reduceMotion) {
     countElements.forEach((element) => countObserver.observe(element));
 }
 
-async function initializeArchitectureScene(reduceMotion) {
-    const sceneElement = document.querySelector('[data-architecture-scene]');
-    const canvasElement = sceneElement?.querySelector('[data-architecture-canvas]');
-
-    if (!sceneElement || !canvasElement) {
-        return;
-    }
-
-    if (reduceMotion) {
-        sceneElement.dataset.architectureState = 'fallback';
-
-        return;
-    }
-
-    try {
-        const { mountArchitectureScene } = await import('./architecture-scene');
-
-        mountArchitectureScene(sceneElement, canvasElement);
-        sceneElement.dataset.architectureState = 'ready';
-    } catch {
-        sceneElement.dataset.architectureState = 'fallback';
-    }
-}
-
-function scheduleArchitectureScene(reduceMotion) {
-    if (reduceMotion) {
-        initializeArchitectureScene(reduceMotion);
-
-        return;
-    }
-
-    if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(() => initializeArchitectureScene(false), { timeout: 1500 });
-
-        return;
-    }
-
-    window.setTimeout(() => initializeArchitectureScene(false));
-}
-
 function initializeHomepage() {
-    const homepage = document.querySelector('[data-architecture-scene]');
+    const homepage = document.querySelector('[data-home-hero]');
 
     if (!homepage) {
         return;
@@ -102,7 +62,6 @@ function initializeHomepage() {
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    scheduleArchitectureScene(reduceMotion);
     initializeRevealAnimations(reduceMotion);
 }
 

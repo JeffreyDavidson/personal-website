@@ -33,6 +33,19 @@ it('provides a keyboard entry point and a programmatic newsletter label', functi
         ->assertNoJavaScriptErrors();
 });
 
+it('keeps newsletter validation accessible and preserves the submitted email', function () {
+    $page = visit(route('home', absolute: false));
+
+    $page->script('document.querySelector("#newsletter-email").form.noValidate = true');
+    $page->fill('Email address', 'not-an-email');
+    $page->press('Subscribe');
+
+    $page->assertPresent('#newsletter-email-error')
+        ->assertValue('#newsletter-email', 'not-an-email')
+        ->assertAttribute('#newsletter-email', 'aria-invalid', 'true')
+        ->assertAttribute('#newsletter-email', 'aria-describedby', 'newsletter-email-error newsletter-privacy');
+});
+
 it('announces testimonial validation once and associates field errors', function () {
     $page = visit(route('testimonials.create', absolute: false));
 
