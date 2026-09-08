@@ -28,21 +28,21 @@ use Spatie\Tags\Tag;
  */
 class PublicContentArchive
 {
-    private const VERSION = 1;
+    private const int VERSION = 1;
 
-    private const POST_FIELDS = ['title', 'slug', 'excerpt', 'content', 'featured_image_path', 'published_at'];
+    private const array POST_FIELDS = ['title', 'slug', 'excerpt', 'content', 'featured_image_path', 'published_at'];
 
-    private const PROJECT_FIELDS = ['title', 'slug', 'description', 'content', 'featured_image_path', 'url', 'github_url', 'tech_stack', 'is_featured', 'sort_order'];
+    private const array PROJECT_FIELDS = ['title', 'slug', 'description', 'content', 'featured_image_path', 'url', 'github_url', 'tech_stack', 'is_featured', 'sort_order'];
 
-    private const PODCAST_FIELDS = ['name', 'slug', 'description', 'long_description', 'cover_image_path', 'color', 'apple_url', 'spotify_url', 'rss_url', 'youtube_url', 'sort_order'];
+    private const array PODCAST_FIELDS = ['name', 'slug', 'description', 'long_description', 'cover_image_path', 'color', 'apple_url', 'spotify_url', 'rss_url', 'youtube_url', 'sort_order'];
 
-    private const EPISODE_FIELDS = ['title', 'slug', 'episode_number', 'season_number', 'description', 'show_notes', 'featured_image_path', 'audio_url', 'audio_path', 'embed_url', 'youtube_url', 'duration_minutes', 'guest_name', 'guest_title', 'guest_url', 'published_at'];
+    private const array EPISODE_FIELDS = ['title', 'slug', 'episode_number', 'season_number', 'description', 'show_notes', 'featured_image_path', 'audio_url', 'audio_path', 'embed_url', 'youtube_url', 'duration_minutes', 'guest_name', 'guest_title', 'guest_url', 'published_at'];
 
-    private const VIDEO_FIELDS = ['youtube_id', 'title', 'slug', 'description', 'thumbnail_url', 'duration', 'view_count', 'like_count', 'comment_count', 'is_featured', 'published_at', 'synced_at'];
+    private const array VIDEO_FIELDS = ['youtube_id', 'title', 'slug', 'description', 'thumbnail_url', 'duration', 'view_count', 'like_count', 'comment_count', 'is_featured', 'published_at', 'synced_at'];
 
-    private const TESTIMONIAL_FIELDS = ['name', 'role', 'company', 'body', 'sort_order'];
+    private const array TESTIMONIAL_FIELDS = ['name', 'role', 'company', 'body', 'sort_order'];
 
-    private const SEO_FIELDS = ['description', 'title', 'image', 'author', 'robots', 'canonical_url'];
+    private const array SEO_FIELDS = ['description', 'title', 'image', 'author', 'robots', 'canonical_url'];
 
     /** @return array<string, mixed> */
     public function export(): array

@@ -25,7 +25,7 @@ use Spatie\Activitylog\Support\LogOptions;
 /** @property-read Collection<int, Episode> $publishedEpisodes */
 class Podcast extends Model
 {
-    private const DEFAULT_COLOR = '#6366f1';
+    private const string DEFAULT_COLOR = '#6366f1';
 
     use HasSEO;
     use LogsActivity;
