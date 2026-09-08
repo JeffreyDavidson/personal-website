@@ -32,10 +32,7 @@ it('generates default and category-specific featured images on the public disk',
         $dimensions = getimagesize($absolutePath);
 
         expect(Storage::disk('public')->size($path))->toBeGreaterThan(0)
-            ->and($dimensions)->not->toBeFalse()
-            ->and($dimensions[0])->toBe(1200)
-            ->and($dimensions[1])->toBe(630)
-            ->and($dimensions['mime'])->toBe('image/png');
+            ->and($dimensions)->toMatchArray([0 => 1200, 1 => 630, 'mime' => 'image/png']);
     }
 
     expect(hash_file('sha256', Storage::disk('public')->path($defaultPath)))
