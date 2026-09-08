@@ -15,7 +15,7 @@ const publicRoutes = [
     '/uses',
 ];
 const publicColorSchemes = ['light', 'dark'] as const;
-const optionalPublicBundles = ['about', 'alpine', 'architecture-scene', 'blog', 'home', 'podcast', 'prism'];
+const optionalPublicBundles = ['about', 'alpine', 'blog', 'home', 'podcast', 'prism'];
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -83,7 +83,7 @@ test('homepage primary actions remain visible at a laptop viewport height', asyn
     await page.goto('/');
 
     for (const name of ['Discuss a Project', 'View Projects']) {
-        const link = page.getByRole('main').getByRole('link', { name, exact: true });
+        const link = page.locator('[data-home-hero]').getByRole('link', { name, exact: true });
 
         await expect(link).toBeVisible();
         await expect.poll(async () => {
@@ -94,66 +94,14 @@ test('homepage primary actions remain visible at a laptop viewport height', asyn
     }
 });
 
-test('homepage architecture scene keeps an accessible fallback', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 });
+test('homepage services stay concise and link to contact', async ({ page }) => {
     await page.goto('/');
-
-    const scene = page.locator('[data-architecture-scene]');
-
-    await expect(scene).toBeVisible();
-    await expect(scene.locator('[data-architecture-fallback]')).toBeAttached();
-    await expect.poll(async () => scene.getAttribute('data-architecture-state'))
-        .toMatch(/ready|fallback/);
-});
-
-test('homepage reduced motion avoids downloading the decorative architecture scene', async ({ page }) => {
-    const requestedAssets = trackRequestedAssets(page);
-
-    await page.goto('/');
-    await expect(page.locator('[data-architecture-scene]')).toHaveAttribute('data-architecture-state', 'fallback');
-
-    expect(requestedBundle(requestedAssets, 'home')).toBeTruthy();
-    expect(requestedBundle(requestedAssets, 'architecture-scene')).toBeFalsy();
-});
-
-test('homepage defers its decorative architecture scene until the browser is idle', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await page.addInitScript(() => {
-        const idleCallbacks: IdleRequestCallback[] = [];
-        const testWindow = window as Window & { __testIdleCallbacks: IdleRequestCallback[] };
-
-        Object.defineProperty(testWindow, '__testIdleCallbacks', { value: idleCallbacks });
-        Object.defineProperty(window, 'requestIdleCallback', {
-            value: (callback) => {
-                idleCallbacks.push(callback);
-
-                return idleCallbacks.length;
-            },
-        });
-    });
-
-    await page.goto('/');
-
-    const scene = page.locator('[data-architecture-scene]');
-
-    await expect(scene).toHaveAttribute('data-architecture-state', 'idle');
-    await expect(scene.locator('[data-architecture-fallback]')).toBeVisible();
-
-    await expect.poll(() => page.evaluate(() => {
-        const testWindow = window as Window & { __testIdleCallbacks: IdleRequestCallback[] };
-
-        return testWindow.__testIdleCallbacks.length;
-    })).toBeGreaterThan(0);
-
-    await page.evaluate(() => {
-        const testWindow = window as Window & { __testIdleCallbacks: IdleRequestCallback[] };
-        const callback = testWindow.__testIdleCallbacks.shift();
-
-        callback?.({ didTimeout: false, timeRemaining: () => 50 });
-    });
-
-    await expect(scene).toHaveAttribute('data-architecture-state', 'ready');
-    await expect(scene.locator('canvas')).toBeVisible();
+    const services = page.getByRole('region', { name: 'Where I can help' });
+    await expect(services).toBeVisible();
+    await expect(services.locator('dt')).toHaveCount(3);
+    await expect(services.locator('svg[aria-hidden="true"]')).toHaveCount(3);
+    await services.getByRole('link', { name: 'Discuss your project' }).click();
+    await expect(page).toHaveURL(/\/contact$/);
 });
 
 test('testimonial submission exposes labeled fields and supporting copy', async ({ page }) => {

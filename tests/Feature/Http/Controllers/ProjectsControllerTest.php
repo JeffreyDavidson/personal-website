@@ -3,8 +3,93 @@
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
+
+it('shows published projects once in their featured groups without repository links', function () {
+    foreach ([['Later featured', true, 2], ['First featured', true, 1], ['Other work', false, 0]] as [$title, $featured, $order]) {
+        Project::query()->create([
+            'title' => $title,
+            'description' => "Summary for {$title}.",
+            'is_featured' => $featured,
+            'sort_order' => $order,
+            'github_url' => 'https://github.com/example/private-repository',
+            'status' => ProjectStatus::Published,
+        ]);
+    }
+
+    Project::query()->create(['title' => 'Unpublished work', 'description' => 'Private draft.', 'status' => ProjectStatus::Draft]);
+
+    $response = $this->get(route('projects.index'));
+
+    $response->assertOk()
+        ->assertSeeInOrder(['Summary for First featured.', 'Summary for Later featured.', 'Summary for Other work.'])
+        ->assertDontSee('Unpublished work')
+        ->assertDontSee('private-repository')
+        ->assertDontSee('Open source projects')
+        ->assertSee('What are you working on?');
+
+    expect(substr_count($response->getContent(), 'data-project-entry'))->toBe(3);
+});
+
+it('offers a contact path when no published projects are available', function () {
+    $response = $this->get(route('projects.index'));
+
+    $response->assertOk()
+        ->assertSee('Project details aren’t available here yet.')
+        ->assertSee(route('contact'), false)
+        ->assertDontSee('data-project-entry', false)
+        ->assertDontSee('featured-projects-heading', false)
+        ->assertDontSee('more-projects-heading', false);
+});
+
+it('uses responsive uploaded images in either project group', function (bool $featured) {
+    Storage::fake('public');
+    $image = UploadedFile::fake()->image('showcase.png', 1280, 720);
+    Storage::disk('public')->put('projects/showcase.png', $image->getContent());
+
+    $project = Project::query()->create([
+        'title' => 'Project showcase',
+        'description' => 'An uploaded product screenshot.',
+        'featured_image_path' => 'projects/showcase.png',
+        'is_featured' => $featured,
+        'status' => ProjectStatus::Published,
+    ]);
+
+    $response = $this->get(route('projects.index'));
+
+    $response->assertOk()
+        ->assertSee($project->featured_image_url, false)
+        ->assertSee('showcase-640.webp', false)
+        ->assertSee('showcase-1280.webp', false)
+        ->assertSee('fetchpriority="high"', false)
+        ->assertSee('object-contain', false);
+})->with([true, false]);
+
+it('keeps repository URLs out of public project markup and structured data', function (?string $website) {
+    $project = Project::query()->create([
+        'title' => 'Private repository project',
+        'description' => 'Public case study, private source.',
+        'github_url' => 'https://github.com/example/confidential-repository',
+        'url' => $website,
+        'status' => ProjectStatus::Published,
+    ]);
+
+    $response = $this->get(route('projects.show', $project));
+
+    $response->assertOk()
+        ->assertDontSee('confidential-repository', false)
+        ->assertDontSee('Explore the code')
+        ->assertSee('Discuss a similar project');
+
+    if ($website !== null) {
+        $response->assertSee($website, false);
+    }
+
+    expect($project->fresh()->github_url)->toBe('https://github.com/example/confidential-repository');
+})->with([null, 'https://example.com/product']);
 
 it('loads only the related projects displayed on a project page', function () {
     $project = Project::query()->create([

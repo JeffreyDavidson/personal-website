@@ -1,5 +1,11 @@
 # Project agent guidance
 
+## Frontend styling
+
+- Use Tailwind utilities directly in Blade for layout, typography, colors, spacing, responsive behavior, and interaction states. Do not introduce custom component CSS classes for styling that utilities can express.
+- Reuse Blade components when utility-heavy markup repeats. Keep custom CSS for font/theme declarations, keyframes, third-party integration, or behavior that genuinely cannot be expressed clearly with utilities.
+- Preserve JavaScript hooks independently from styling, preferably with data attributes.
+
 ## Controllers
 
 - Controllers must not contain private methods. Keep controllers focused on translating HTTP requests and responses, and move supporting behavior into an appropriately named action, query, builder, or other cohesive application boundary.
