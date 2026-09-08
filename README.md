@@ -43,9 +43,15 @@ CI validates Composer configuration and runs dependency auditing, formatting, st
 
 ### Rector review
 
-Run `composer test:rector` to preview PHP and Laravel upgrades and Pest coding-style suggestions without modifying files. `rector.php` derives the PHP target (currently 8.5) and Laravel rules from Composer and enables `PestSetList::CODING_STYLE` in the same configuration. It scans application code, bootstrap configuration, configuration files, factories, seeders, routes, and tests; existing migrations and generated files are outside its configured paths.
+Run `composer test:rector` to preview application PHP and Laravel upgrades without modifying files. `rector.php` derives the PHP target (currently 8.5) and Laravel rules from Composer. It scans application code, bootstrap configuration, configuration files, factories, seeders, and routes; existing migrations and generated files are outside its configured paths.
+
+Run `composer test:rector:pest` to review tests separately using `rector-pest.php`. This configuration includes PHP and Laravel upgrades plus `PestSetList::CODING_STYLE`, including expectation chaining.
 
 A nonzero result can mean changes are suggested, not that the application is broken. Review the proposed diffs before applying any refactoring. This check is advisory and is not part of required CI.
+
+### Test static analysis
+
+Run `composer test:types:pest` to analyze `tests/` at PHPStan's maximum level using `phpstan-pest.neon`. Larastan and the Pest extension are automatically registered by Composer's extension installer. This is an advisory check while existing findings are reviewed; it does not suppress errors or add a baseline. `composer test:types` continues to analyze `app/` independently, and its existing CI requirement is unchanged.
 
 ## Architecture
 
