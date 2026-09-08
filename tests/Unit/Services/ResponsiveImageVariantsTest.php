@@ -25,17 +25,15 @@ it('generates responsive webp variants without replacing the original image', fu
         'projects/project.png',
     ]);
 
-    $small = getimagesizefromstring(
-        Storage::disk('public')->get('projects/responsive/project-640.webp'),
+    $small = getimagesize(
+        Storage::disk('public')->path('projects/responsive/project-640.webp'),
     );
-    $large = getimagesizefromstring(
-        Storage::disk('public')->get('projects/responsive/project-1280.webp'),
+    $large = getimagesize(
+        Storage::disk('public')->path('projects/responsive/project-1280.webp'),
     );
 
-    expect($small)->toMatchArray([640, 36])
-        ->and($small['mime'])->toBe('image/webp')
-        ->and($large)->toMatchArray([1280, 72])
-        ->and($large['mime'])->toBe('image/webp');
+    expect($small)->toMatchArray([0 => 640, 1 => 36, 'mime' => 'image/webp'])
+        ->and($large)->toMatchArray([0 => 1280, 1 => 72, 'mime' => 'image/webp']);
 });
 
 it('returns a srcset only for generated variants that exist', function () {
