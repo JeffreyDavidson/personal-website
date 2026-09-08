@@ -63,7 +63,11 @@ it('does not expose the API key or request URL when subscriber refresh fails', f
     $logger->expects('warning')
         ->with(
             'Unable to refresh the YouTube subscriber count.',
-            Argument::satisfies(function (array $context): bool {
+            Argument::satisfies(function (mixed $context): bool {
+                if (! is_array($context)) {
+                    return false;
+                }
+
                 $loggedData = json_encode($context, JSON_THROW_ON_ERROR);
 
                 return ! str_contains($loggedData, 'secret-youtube-api-key')
