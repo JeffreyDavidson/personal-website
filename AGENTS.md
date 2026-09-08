@@ -19,3 +19,13 @@
 - After a verified release, synchronize `develop` directly to `main` with a fast-forward-only merge and push. Never open a downstream pull request from `main` into `develop`.
 - Never squash, rebase, create a merge commit, or force-push while synchronizing `develop` after a release.
 - If branch protection blocks the direct synchronization, temporarily relax only the required-pull-request rule, restore it immediately after the push, and verify the protection is active again.
+
+## Post-merge synchronization and cleanup
+
+- After a verified PR merge into `develop`, include local synchronization and merged-branch cleanup in the workflow without waiting for a separate request.
+- Verify the PR is merged on GitHub; do not infer completion from a user message. With a clean working tree, switch to `develop` and pull `origin develop` with `--ff-only`. Stop if local changes, divergence, or another worktree prevent this safely.
+- Clean up the merged PR's local and remote head branches only after verifying each existing tip exactly matches the PR's merged head commit. For an explicit broader cleanup request, apply the same checks to every candidate. Squash merges require PR evidence, not just `git branch --merged`.
+- Never delete `main`, `develop`, branches with post-merge commits, or branches checked out in another worktree. Do not remove worktrees or discard uncommitted changes as part of cleanup.
+- Prefer normal local branch deletion; force-delete a local squash-merged branch only after the checks above prove its work is merged. Verify remote tips again before deletion and use an expected-tip guard where supported.
+- Treat a request to merge as authorization for this verified cleanup, subject to execution-policy restrictions. Never bypass a denied operation; report what remains blocked. This file does not override tool permissions or production-operation confirmation requirements.
+- Verify the synchronized branch matches its remote and report synchronization, deleted branches, and any skipped or blocked cleanup. Follow the release-specific rules above when the PR targets `main`.
