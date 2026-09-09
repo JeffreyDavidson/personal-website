@@ -5,6 +5,7 @@ namespace Tests;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\PendingCommand;
 use JMac\Testing\Integrations\PHPUnit\VerifiesDoubles;
+use Pest\Browser\Api\AwaitableWebpage;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -31,5 +32,16 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $pendingCommand;
+    }
+
+    protected function browserPage(string $url, string $device): AwaitableWebpage
+    {
+        $page = \visit($url)->on()->{$device}();
+
+        if (! $page instanceof AwaitableWebpage) {
+            throw new \RuntimeException('Expected a browser page after selecting a device.');
+        }
+
+        return $page;
     }
 }

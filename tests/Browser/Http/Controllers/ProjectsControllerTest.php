@@ -33,11 +33,13 @@ it('renders responsive project images without overflow', function (string $route
         'status' => ProjectStatus::Published,
     ]);
 
-    expect($project->fresh()->featured_image_path)->toBe('showcase.png');
+    $project->refresh();
+    expect($project->featured_image_path)->toBe('showcase.png');
 
-    $page = visit(route($route, $route === 'projects.show' ? $project : [], absolute: false))
-        ->on()
-        ->{$device}();
+    $page = $this->browserPage(
+        route($route, $route === 'projects.show' ? $project : [], absolute: false),
+        $device,
+    );
 
     $page->assertScript('document.querySelectorAll("main picture img").length', 1)
         ->assertScript('document.querySelector("main picture img").complete && document.querySelector("main picture img").naturalWidth > 0')
@@ -57,9 +59,7 @@ it('keeps image-free projects navigable', function (string $device) {
         'status' => ProjectStatus::Published,
     ]);
 
-    $page = visit(route('projects.index', absolute: false))
-        ->on()
-        ->{$device}();
+    $page = $this->browserPage(route('projects.index', absolute: false), $device);
 
     $page = $page->assertSeeIn('#more-projects-heading', 'More projects')
         ->assertCount('[data-project-entry]', 1)
@@ -88,9 +88,7 @@ it('offers contact when there are no published projects', function (string $devi
         'status' => ProjectStatus::Draft,
     ]);
 
-    $page = visit(route('projects.index', absolute: false))
-        ->on()
-        ->{$device}();
+    $page = $this->browserPage(route('projects.index', absolute: false), $device);
 
     $page->assertSee('Project details aren’t available here yet.')
         ->assertDontSee('Unpublished client project')
