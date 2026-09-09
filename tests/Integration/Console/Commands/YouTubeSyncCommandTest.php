@@ -3,6 +3,7 @@
 use App\Models\Video;
 use App\Services\YouTubeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Date;
 use JMac\Testing\Double;
 
 uses(RefreshDatabase::class);
@@ -36,7 +37,7 @@ it('creates new videos and forwards the requested limit', function () {
         ->and($video->slug)->toBe('a-new-video')
         ->and($video->description)->toBe('New description')
         ->and($video->view_count)->toBe(120)
-        ->and($video->published_at?->toIso8601String())->toBe('2026-08-18T12:00:00+00:00')
+        ->and(Date::parse($video->published_at)->toIso8601String())->toBe('2026-08-18T12:00:00+00:00')
         ->and($video->synced_at)->not->toBeNull();
 });
 

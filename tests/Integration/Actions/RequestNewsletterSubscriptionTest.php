@@ -5,6 +5,7 @@ use App\Mail\ConfirmNewsletterSubscription;
 use App\Models\Subscriber;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 
@@ -43,8 +44,10 @@ it('does not restart an active verified subscription', function () {
 
     app(RequestNewsletterSubscription::class)('Reader@Example.com');
 
-    expect($subscriber->refresh()->subscribed_at?->equalTo($subscribedAt))->toBeTrue()
-        ->and($subscriber->verified_at?->equalTo($verifiedAt))->toBeTrue()
+    $subscriber->refresh();
+
+    expect(Date::parse($subscriber->subscribed_at)->equalTo($subscribedAt))->toBeTrue()
+        ->and(Date::parse($subscriber->verified_at)->equalTo($verifiedAt))->toBeTrue()
         ->and($subscriber->verification_token_hash)->toBeNull();
 
     Mail::assertNothingQueued();
