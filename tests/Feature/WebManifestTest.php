@@ -34,7 +34,7 @@ it('provides every declared web application icon at its advertised dimensions', 
 });
 
 /**
- * @return array{description: string, icons: list<array{src: string, sizes: string}>, ...}
+ * @return array{id: string, name: string, short_name: string, start_url: string, scope: string, lang: string, display: string, description: string, icons: list<array{src: string, sizes: string}>}
  */
 function readWebManifest(): array
 {
@@ -44,8 +44,15 @@ function readWebManifest(): array
     }
 
     $manifest = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
-    if (! is_array($manifest) || ! is_string($manifest['description'] ?? null) || ! is_array($manifest['icons'] ?? null)) {
+    $requiredKeys = ['id', 'name', 'short_name', 'start_url', 'scope', 'lang', 'display', 'description'];
+    if (! is_array($manifest) || ! is_array($manifest['icons'] ?? null)) {
         throw new RuntimeException('Web manifest has an invalid structure.');
+    }
+
+    foreach ($requiredKeys as $key) {
+        if (! is_string($manifest[$key] ?? null)) {
+            throw new RuntimeException("Web manifest field {$key} is invalid.");
+        }
     }
 
     $icons = [];
@@ -57,5 +64,15 @@ function readWebManifest(): array
         $icons[] = ['src' => $icon['src'], 'sizes' => $icon['sizes']];
     }
 
-    return [...$manifest, 'description' => $manifest['description'], 'icons' => $icons];
+    return [
+        'id' => $manifest['id'],
+        'name' => $manifest['name'],
+        'short_name' => $manifest['short_name'],
+        'start_url' => $manifest['start_url'],
+        'scope' => $manifest['scope'],
+        'lang' => $manifest['lang'],
+        'display' => $manifest['display'],
+        'description' => $manifest['description'],
+        'icons' => $icons,
+    ];
 }
