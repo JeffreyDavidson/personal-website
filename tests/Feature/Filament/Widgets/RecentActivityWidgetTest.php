@@ -7,7 +7,7 @@ use App\Models\Post;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 use function Pest\Livewire\livewire;
 
@@ -37,7 +37,7 @@ it('renders the newest posts and testimonials in chronological order', function 
             'status' => $status,
         ]);
 
-        $post->forceFill(['updated_at' => Carbon::parse($updatedAt)])->saveQuietly();
+        $post->forceFill(['updated_at' => Date::parse($updatedAt)])->saveQuietly();
     }
 
     $testimonials = [
@@ -53,7 +53,7 @@ it('renders the newest posts and testimonials in chronological order', function 
             'status' => $status,
         ]);
 
-        $testimonial->forceFill(['created_at' => Carbon::parse($createdAt)])->saveQuietly();
+        $testimonial->forceFill(['created_at' => Date::parse($createdAt)])->saveQuietly();
     }
 
     livewire(RecentActivityWidget::class)
