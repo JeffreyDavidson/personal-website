@@ -1,5 +1,11 @@
 parameters:
     paths:
         - tests
+
     level: max
     treatPhpDocTypesAsCertain: false
+
+    stubFiles:
+        - tests/pest-livewire.stub
+
+    tmpDir: storage/framework/cache/phpstan-pest
