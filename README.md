@@ -51,6 +51,8 @@ A nonzero result can mean changes are suggested, not that the application is bro
 
 ### Test static analysis
 
+Both PHPStan configurations use maximum level with `treatPhpDocTypesAsCertain: false` and separate caches under `storage/framework/cache`. The test command sets `APP_ENV=testing`. `tests/pest-livewire.stub` preserves component-specific typing for the Pest Livewire helper; it is analysis-only and should be revisited when upstream supplies equivalent typing.
+
 Run `composer test:types:pest` to analyze `tests/` at PHPStan's maximum level using `phpstan-pest.neon`. Larastan and the Pest extension are automatically registered by Composer's extension installer. This is an advisory check while existing findings are reviewed; it does not suppress errors or add a baseline. `composer test:types` continues to analyze `app/` independently, and its existing CI requirement is unchanged.
 
 ## Architecture

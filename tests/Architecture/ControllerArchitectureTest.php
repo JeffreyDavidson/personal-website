@@ -25,6 +25,10 @@ $controllerClasses = function (): array {
 
 it('prohibits private methods in controllers', function () use ($controllerClasses) {
     foreach ($controllerClasses() as $controller) {
+        if (! class_exists($controller)) {
+            throw new RuntimeException("Controller class {$controller} could not be loaded.");
+        }
+
         $reflection = new ReflectionClass($controller);
         $privateMethods = collect($reflection->getMethods(ReflectionMethod::IS_PRIVATE))
             ->filter(fn (ReflectionMethod $method): bool => $method->getDeclaringClass()->getName() === $controller)
@@ -32,7 +36,7 @@ it('prohibits private methods in controllers', function () use ($controllerClass
             ->values()
             ->all();
 
-        expect($privateMethods, "{$controller} may not declare private methods.")->toBe([]);
+        expect($privateMethods)->toBe([], "{$controller} may not declare private methods.");
     }
 });
 
@@ -40,6 +44,10 @@ it('keeps controllers invokable or resourceful', function () use ($controllerCla
     $resourceMethods = ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'];
 
     foreach ($controllerClasses() as $controller) {
+        if (! class_exists($controller)) {
+            throw new RuntimeException("Controller class {$controller} could not be loaded.");
+        }
+
         $reflection = new ReflectionClass($controller);
         $publicMethods = collect($reflection->getMethods(ReflectionMethod::IS_PUBLIC))
             ->filter(fn (ReflectionMethod $method): bool => $method->getDeclaringClass()->getName() === $controller)
@@ -50,22 +58,21 @@ it('keeps controllers invokable or resourceful', function () use ($controllerCla
             ->all();
 
         if ($reflection->isAbstract()) {
-            expect($publicMethods, "{$controller} may not define controller actions.")->toBe([]);
+            expect($publicMethods)->toBe([], "{$controller} may not define controller actions.");
 
             continue;
         }
 
         if (in_array('__invoke', $publicMethods, true)) {
-            expect($publicMethods, "{$controller} must contain only its __invoke action.")
-                ->toBe(['__invoke']);
+            expect($publicMethods)
+                ->toBe(['__invoke'], "{$controller} must contain only its __invoke action.");
 
             continue;
         }
 
-        expect($publicMethods, "{$controller} must define a controller action.")->not->toBe([])
+        expect($publicMethods)->not->toBe([], "{$controller} must define a controller action.")
             ->and(
                 array_values(array_diff($publicMethods, $resourceMethods)),
-                "{$controller} contains non-resource controller actions.",
-            )->toBe([]);
+            )->toBe([], "{$controller} contains non-resource controller actions.");
     }
 });
