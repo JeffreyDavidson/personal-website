@@ -4,6 +4,7 @@ use App\Enums\ProjectStatus;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -31,7 +32,12 @@ it('shows published projects once in their featured groups without repository li
         ->assertDontSee('Open source projects')
         ->assertSee('What are you working on?');
 
-    expect(substr_count($response->getContent(), 'data-project-entry'))->toBe(3);
+    $content = $response->getContent();
+    if (! is_string($content)) {
+        throw new RuntimeException('Expected project index HTML.');
+    }
+
+    expect(substr_count($content, 'data-project-entry'))->toBe(3);
 });
 
 it('offers a contact path when no published projects are available', function () {
@@ -60,8 +66,13 @@ it('uses responsive uploaded images in either project group', function (bool $fe
 
     $response = $this->get(route('projects.index'));
 
+    $imageUrl = $project->featured_image_url;
+    if ($imageUrl === null) {
+        throw new RuntimeException('Expected the uploaded project image URL.');
+    }
+
     $response->assertOk()
-        ->assertSee($project->featured_image_url, false)
+        ->assertSee($imageUrl, false)
         ->assertSee('showcase-640.webp', false)
         ->assertSee('showcase-1280.webp', false)
         ->assertSee('fetchpriority="high"', false)
@@ -88,7 +99,7 @@ it('keeps repository URLs out of public project markup and structured data', fun
         $response->assertSee($website, false);
     }
 
-    expect($project->fresh()->github_url)->toBe('https://github.com/example/confidential-repository');
+    expect($project->refresh()->github_url)->toBe('https://github.com/example/confidential-repository');
 })->with([null, 'https://example.com/product']);
 
 it('loads only the related projects displayed on a project page', function () {
@@ -120,7 +131,7 @@ it('loads only the related projects displayed on a project page', function () {
 
     $this->get(route('projects.show', $project))
         ->assertOk()
-        ->assertViewHas('otherProjects', fn ($otherProjects): bool => $otherProjects->count() === 3)
+        ->assertViewHas('otherProjects', fn ($otherProjects): bool => $otherProjects instanceof Collection && $otherProjects->count() === 3)
         ->assertSee('Related Project 2')
         ->assertSee('Related Project 4')
         ->assertDontSee('Related Project 5')

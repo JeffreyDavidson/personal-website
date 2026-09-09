@@ -33,7 +33,12 @@ it('renders the Turnstile widget on the contact page', function () {
         ->assertDontSee('position:absolute;left:-9999px;top:-9999px;', false)
         ->assertSee('JavaScript is required to complete the verification.', false);
 
-    expect(substr_count($response->getContent(), 'https://challenges.cloudflare.com/turnstile/v0/api.js'))
+    $content = $response->getContent();
+    if (! is_string($content)) {
+        throw new RuntimeException('Expected contact form HTML.');
+    }
+
+    expect(substr_count($content, 'https://challenges.cloudflare.com/turnstile/v0/api.js'))
         ->toBe(0);
 });
 

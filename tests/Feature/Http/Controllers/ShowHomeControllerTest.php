@@ -5,6 +5,7 @@ use App\Enums\TestimonialStatus;
 use App\Models\Project;
 use App\Models\Testimonial;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 
 uses(RefreshDatabase::class);
 
@@ -25,8 +26,13 @@ it('presents featured projects without duplicated summaries or invented artwork'
         ->assertSee('Selected work')
         ->assertDontSee('Domain overview')
         ->assertDontSee('home-case-study-fallback');
-    expect(substr_count($response->getContent(), 'data-project-entry'))->toBe($count);
-    expect(substr_count($response->getContent(), 'A distinct project summary 1.'))->toBe(1);
+    $content = $response->getContent();
+    if (! is_string($content)) {
+        throw new RuntimeException('Expected homepage HTML.');
+    }
+
+    expect(substr_count($content, 'data-project-entry'))->toBe($count)
+        ->and(substr_count($content, 'A distinct project summary 1.'))->toBe(1);
 })->with([1, 2, 4]);
 
 it('omits selected work when no projects are featured', function () {
@@ -72,7 +78,7 @@ it('loads only the testimonials displayed on the homepage while retaining the ap
 
     $this->get(route('home'))
         ->assertOk()
-        ->assertViewHas('testimonials', fn ($testimonials): bool => $testimonials->count() === 3)
+        ->assertViewHas('testimonials', fn ($testimonials): bool => $testimonials instanceof Collection && $testimonials->count() === 3)
         ->assertViewHas('approvedTestimonialCount', 5)
         ->assertSee('Approved Client 1')
         ->assertSee('Approved Client 3')

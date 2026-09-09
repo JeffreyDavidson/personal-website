@@ -26,7 +26,7 @@ it('records operational post changes without recording long-form content', funct
     $post->update(['title' => 'Updated activity logging']);
 
     $activity = Activity::query()->forSubject($post)->latest('id')->firstOrFail();
-    $attributes = $activity->attribute_changes->get('attributes');
+    $attributes = $activity->attribute_changes?->get('attributes');
 
     expect($attributes)
         ->toHaveKey('title', 'Updated activity logging')
@@ -54,7 +54,7 @@ it('does not include testimonial personal details in the activity log', function
     $testimonial->update(['status' => TestimonialStatus::Approved]);
 
     $activity = Activity::query()->forSubject($testimonial)->latest('id')->firstOrFail();
-    $attributes = $activity->attribute_changes->get('attributes');
+    $attributes = $activity->attribute_changes?->get('attributes');
 
     expect($attributes)
         ->toHaveKey('status', TestimonialStatus::Approved->value)
