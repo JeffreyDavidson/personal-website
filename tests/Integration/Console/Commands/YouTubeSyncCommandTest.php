@@ -25,7 +25,7 @@ it('creates new videos and forwards the requested limit', function () {
         ]]);
     app()->instance(YouTubeService::class, $youtube);
 
-    $this->artisan('youtube:sync', ['--limit' => 12])
+    $this->artisanCommand('youtube:sync', ['--limit' => 12])
         ->expectsOutput('Fetching videos from YouTube...')
         ->expectsOutput('Done! 1 new, 0 updated.')
         ->assertSuccessful();
@@ -70,7 +70,7 @@ it('updates an existing video without replacing its publishing fields', function
         ]]);
     app()->instance(YouTubeService::class, $youtube);
 
-    $this->artisan('youtube:sync')
+    $this->artisanCommand('youtube:sync')
         ->expectsOutput('Done! 0 new, 1 updated.')
         ->assertSuccessful();
 
@@ -81,8 +81,8 @@ it('updates an existing video without replacing its publishing fields', function
         ->and($video->view_count)->toBe(250)
         ->and($video->slug)->toBe('curated-slug')
         ->and($video->is_featured)->toBeTrue()
-        ->and($video->published_at?->toDateTimeString())->toBe('2026-08-01 09:00:00')
-        ->and($video->synced_at?->toDateTimeString())->toBe('2026-08-19 10:30:00');
+        ->and(Date::parse($video->published_at)->toDateTimeString())->toBe('2026-08-01 09:00:00')
+        ->and(Date::parse($video->synced_at)->toDateTimeString())->toBe('2026-08-19 10:30:00');
 });
 
 it('creates stable unique slugs for colliding and empty titles', function () {
@@ -129,7 +129,7 @@ it('creates stable unique slugs for colliding and empty titles', function () {
         ->returns($payloads);
     app()->instance(YouTubeService::class, $youtube);
 
-    $this->artisan('youtube:sync')
+    $this->artisanCommand('youtube:sync')
         ->expectsOutput('Done! 3 new, 0 updated.')
         ->assertSuccessful();
 
@@ -137,7 +137,7 @@ it('creates stable unique slugs for colliding and empty titles', function () {
         ->and(Video::query()->where('youtube_id', 'second-video')->value('slug'))->toBe('same-title-second-video')
         ->and(Video::query()->where('youtube_id', 'empty-title-video')->value('slug'))->toBe('video-empty-title-video');
 
-    $this->artisan('youtube:sync')
+    $this->artisanCommand('youtube:sync')
         ->expectsOutput('Done! 0 new, 3 updated.')
         ->assertSuccessful();
 
@@ -160,7 +160,7 @@ it('fails without changing videos when YouTube is unavailable', function () {
         ->throws(new RuntimeException('YouTube is unavailable.'));
     app()->instance(YouTubeService::class, $youtube);
 
-    $this->artisan('youtube:sync')
+    $this->artisanCommand('youtube:sync')
         ->expectsOutput('YouTube is unavailable.')
         ->assertFailed();
 
