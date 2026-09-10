@@ -42,10 +42,6 @@
                             <h3 class="mb-1 font-semibold text-gray-900 dark:text-white">Newsletter subscriptions</h3>
                             <p class="leading-relaxed">The newsletter stores your email address and subscription, confirmation, and unsubscribe timestamps. A temporary, hashed verification token supports the confirmation process. Subscription requires email confirmation, and every subscriber can unsubscribe using the link provided in newsletter messages.</p>
                         </div>
-                        <div>
-                            <h3 class="mb-1 font-semibold text-gray-900 dark:text-white">Testimonials</h3>
-                            <p class="leading-relaxed">A testimonial submission includes your name, testimonial text, and any role or company you choose to provide. Submissions are stored for review and are not displayed until approved. Because approved testimonials may appear publicly, do not submit information you do not want published.</p>
-                        </div>
                     </div>
                 </section>
 
@@ -60,13 +56,13 @@
 
                 <section aria-labelledby="privacy-use">
                     <h2 id="privacy-use" class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">How information is used and shared</h2>
-                    <p class="mb-4 leading-relaxed">Information is used to answer inquiries, deliver and administer newsletter subscriptions, review and publish approved testimonials, secure the application, prevent abuse, and understand site performance.</p>
+                    <p class="mb-4 leading-relaxed">Information is used to answer inquiries, deliver and administer newsletter subscriptions, secure the application, prevent abuse, and understand site performance.</p>
                     <p class="leading-relaxed">Information is shared only with service providers needed to operate the site—such as hosting, email delivery, analytics, and embedded media—or when disclosure is required to comply with law or protect the site and its users. Those providers process information under their own terms and privacy notices.</p>
                 </section>
 
                 <section aria-labelledby="privacy-retention">
                     <h2 id="privacy-retention" class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Retention and your choices</h2>
-                    <p class="mb-4 leading-relaxed">Information is kept only as long as reasonably needed for the purpose described above, site security, or legitimate recordkeeping. Newsletter records and testimonials remain until they are no longer needed or a deletion request is completed. Operational logs and email records follow the retention settings of the services that store them.</p>
+                    <p class="mb-4 leading-relaxed">Information is kept only as long as reasonably needed for the purpose described above, site security, or legitimate recordkeeping. Newsletter records remain until they are no longer needed or a deletion request is completed. Legacy records retained in the application database follow the same retention and deletion practices. Operational logs and email records follow the retention settings of the services that store them.</p>
                     <p class="leading-relaxed">You may ask to access, correct, or delete personal information associated with you. Newsletter subscribers can also use the unsubscribe link in any newsletter. Requests can be made through the <a href="{{ route('contact') }}" class="font-medium text-brand-600 underline decoration-brand-300 underline-offset-4 transition-colors hover:text-brand-500 dark:text-brand-300 dark:decoration-brand-700">contact form</a>.</p>
                 </section>
 

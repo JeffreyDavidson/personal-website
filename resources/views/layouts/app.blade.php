@@ -48,6 +48,7 @@
                 </button>
 
                 <div class="hidden md:flex items-center gap-8">
+                    <a href="{{ route('services') }}" @if(request()->routeIs('services')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors @if(request()->routeIs('services')) is-active text-gray-900 dark:text-white @endif">Services</a>
                     <a href="{{ route('projects.index') }}" @if(request()->routeIs('projects.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors @if(request()->routeIs('projects.*')) is-active text-gray-900 dark:text-white @endif">Projects</a>
                     <a href="{{ route('blog.index') }}" @if(request()->routeIs('blog.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors @if(request()->routeIs('blog.*')) is-active text-gray-900 dark:text-white @endif">Writing</a>
                     <a href="{{ route('podcast.index') }}" @if(request()->routeIs('podcast.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors @if(request()->routeIs('podcast.*')) is-active text-gray-900 dark:text-white @endif">Podcast</a>
@@ -63,6 +64,7 @@
             {{-- Mobile menu --}}
             <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-brand-800/50 py-4">
                 <div class="flex flex-col gap-3">
+                    <a href="{{ route('services') }}" @if(request()->routeIs('services')) aria-current="page" @endif class="nav-link px-2 py-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors @if(request()->routeIs('services')) is-active text-gray-900 dark:text-white @endif">Services</a>
                     <a href="{{ route('projects.index') }}" @if(request()->routeIs('projects.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-2 py-1 @if(request()->routeIs('projects.*')) is-active text-gray-900 dark:text-white @endif">Projects</a>
                     <a href="{{ route('blog.index') }}" @if(request()->routeIs('blog.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-2 py-1 @if(request()->routeIs('blog.*')) is-active text-gray-900 dark:text-white @endif">Writing</a>
                     <a href="{{ route('podcast.index') }}" @if(request()->routeIs('podcast.*')) aria-current="page" @endif class="nav-link text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-2 py-1 @if(request()->routeIs('podcast.*')) is-active text-gray-900 dark:text-white @endif">Podcast</a>
@@ -113,6 +115,7 @@
                             <li><a href="{{ route('podcast.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Podcast</a></li>
                             <li><a href="{{ route('projects.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Projects</a></li>
                             <li><a href="{{ route('about') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">About</a></li>
+                            <li><a href="{{ route('services') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Services</a></li>
                             <li><a href="{{ route('uses') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Uses</a></li>
                         </ul>
                     </div>

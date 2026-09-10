@@ -49,7 +49,7 @@
                 </a>
             </div>
 
-            @if($pendingTestimonials > 0 || $inReviewPosts > 0)
+            @if($inReviewPosts > 0)
                 <div class="tla-dashboard-attention" aria-label="Needs attention">
                     <span class="tla-dashboard-attention__label">Needs attention</span>
 
@@ -57,13 +57,6 @@
                         <a href="{{ \App\Filament\Resources\Posts\PostResource::getUrl('index') }}">
                             <strong>{{ $inReviewPosts }}</strong>
                             {{ $inReviewPosts === 1 ? 'post is' : 'posts are' }} awaiting review
-                        </a>
-                    @endif
-
-                    @if($pendingTestimonials > 0)
-                        <a href="{{ \App\Filament\Resources\Testimonials\TestimonialResource::getUrl('index') }}">
-                            <strong>{{ $pendingTestimonials }}</strong>
-                            {{ $pendingTestimonials === 1 ? 'testimonial needs' : 'testimonials need' }} review
                         </a>
                     @endif
                 </div>

@@ -108,14 +108,11 @@
     years="15"
     :published-posts="$publishedPostCount"
     :published-projects="$publishedProjectCount"
-    :recommendations="$approvedTestimonialCount"
 />
 
 <x-home.services />
 
 <x-home.selected-work :projects="$featuredProjects" />
-
-<x-home.credibility :testimonials="$testimonials" />
 
 {{-- ===== LATEST POSTS ===== --}}
 <section class="writing-section border-t border-gray-200 bg-gray-50 py-14 dark:border-brand-800/50 dark:bg-transparent sm:py-24">

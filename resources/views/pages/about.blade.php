@@ -17,29 +17,6 @@
             ['year' => '2026', 'title' => 'The Laravel Architect', 'desc' => 'Blog, podcast, YouTube. Building in public'],
         ];
 
-        $facts = [
-            ['icon' => '☕', 'label' => 'Daily Coffee', 'value' => 'Too Many'],
-            ['icon' => '🎢', 'label' => 'Favorite Park', 'value' => 'Disney World'],
-            ['icon' => '🃏', 'label' => 'Poker Style', 'value' => 'Aggressive'],
-            ['icon' => '🤼', 'label' => 'Side Project', 'value' => 'Wrestling App'],
-            ['icon' => '🏫', 'label' => 'Alma Mater', 'value' => 'Full Sail University'],
-            ['icon' => '🏀', 'label' => 'Forever Fan', 'value' => 'Rock Chalk'],
-        ];
-
-        $techStack = [
-            ['name' => 'Laravel', 'icon' => '🔺', 'desc' => 'My framework of choice since 2014'],
-            ['name' => 'PHP', 'icon' => '🐘', 'desc' => 'The language that started it all'],
-            ['name' => 'Filament', 'icon' => '🛡️', 'desc' => 'Admin panels done right'],
-            ['name' => 'Livewire', 'icon' => '⚡', 'desc' => 'Reactive interfaces without the SPA'],
-            ['name' => 'Tailwind CSS', 'icon' => '🎨', 'desc' => 'Utility-first, no going back'],
-            ['name' => 'Alpine.js', 'icon' => '🏔️', 'desc' => 'Just enough JavaScript'],
-            ['name' => 'Pest', 'icon' => '🧪', 'desc' => 'Testing with elegance'],
-            ['name' => 'MySQL', 'icon' => '🗄️', 'desc' => 'Relational data, done well'],
-            ['name' => 'Redis', 'icon' => '⚡', 'desc' => 'Caching, queues, sessions'],
-            ['name' => 'Laravel Forge', 'icon' => '🔨', 'desc' => 'Deployment without the pain'],
-            ['name' => 'Git', 'icon' => '📦', 'desc' => 'Version everything, always'],
-            ['name' => 'SQLite', 'icon' => '💾', 'desc' => 'Perfect for the right project'],
-        ];
     @endphp
 
     {{-- Hero --}}
@@ -163,17 +140,8 @@
 
                 {{-- Intro Text --}}
                 <div class="flex-1 text-center md:text-left">
-                    <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-brand-600">Profile / 04</p>
-                    <div class="flex items-center gap-3 mb-4 justify-center md:justify-start">
-                        <div class="font-mono text-sm text-gray-500 flex items-center gap-2">
-                            <span class="text-brand-600">$</span>
-                            <span>php artisan about:me</span>
-                            <span class="text-gray-400 dark:text-brand-600 relative -top-px">▊</span>
-                        </div>
-                    </div>
-
                     <h1 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight text-gray-900 dark:text-white">
-                        I've spent 15 years learning how to write code that my future self <span class="text-brand-600">won't hate.</span>
+                        I’m Jeffrey Davidson. I build Laravel applications that are <span class="text-brand-600">easier to change.</span>
                     </h1>
                     <p class="text-gray-600 dark:text-gray-400 text-base leading-relaxed max-w-xl mx-auto md:mx-0">
                         Web developer based in Florida. I build clean, maintainable applications with Laravel and share what I learn through writing, podcast conversations, and practical YouTube videos. When I'm not coding, I'm being a dad, exploring theme parks, and pretending I'm going to get better at poker.
@@ -227,6 +195,10 @@
                             Now I'm building content alongside code. <strong class="text-gray-900 dark:text-gray-200">Coffee with The Laravel Architect</strong> is me talking about the framework I love, and on <strong class="text-gray-900 dark:text-gray-200">The Laravel Architect</strong> YouTube channel I share practical Laravel videos, tutorials, and live coding.
                         </p>
                     </div>
+                    <section aria-labelledby="outside-work-heading" class="mt-8 border-t border-gray-200 pt-8 dark:border-brand-800">
+                        <h3 id="outside-work-heading" class="text-xl font-semibold text-gray-900 dark:text-white">Outside of work</h3>
+                        <p class="mt-3 max-w-2xl text-base leading-7 text-gray-600 dark:text-gray-400">There’s usually coffee nearby. Away from the keyboard, I’m spending time with my family, exploring Disney World, and cheering on Kansas basketball. Rock Chalk.</p>
+                    </section>
                 </div>
 
                 {{-- Timeline sidebar (vertical on mobile & large) --}}
@@ -335,32 +307,6 @@
                         <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </x-slot:icon>
                 </x-about.value-card>
-            </div>
-        </div>
-    </div>
-
-    {{-- Fun Facts --}}
-    <div class="border-t border-gray-200 dark:border-brand-700 bg-gray-50 dark:bg-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
-                @foreach($facts as $fact)
-                    <x-about.fact :icon="$fact['icon']" :label="$fact['label']" :value="$fact['value']" />
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    {{-- Tech Stack --}}
-    <div class="border-t border-gray-200 bg-white dark:border-brand-700 dark:bg-[#0b1016]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-            <div class="text-center mb-14">
-                <p class="text-xs font-semibold uppercase tracking-widest text-gray-600 mb-3">Toolbox</p>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">What I Work With</h2>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                @foreach($techStack as $tech)
-                    <x-about.tech-card :tech="$tech" />
-                @endforeach
             </div>
         </div>
     </div>
