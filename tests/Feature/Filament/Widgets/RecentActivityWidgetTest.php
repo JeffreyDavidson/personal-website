@@ -1,10 +1,8 @@
 <?php
 
 use App\Enums\PublishStatus;
-use App\Enums\TestimonialStatus;
 use App\Filament\Widgets\RecentActivityWidget;
 use App\Models\Post;
-use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Date;
@@ -18,7 +16,7 @@ it('renders an empty state when there is no recent activity', function () {
         ->assertSee('No activity yet');
 });
 
-it('renders the newest posts and testimonials in chronological order', function () {
+it('renders the newest posts in chronological order', function () {
     $user = User::factory()->create();
 
     $posts = [
@@ -40,33 +38,13 @@ it('renders the newest posts and testimonials in chronological order', function 
         $post->forceFill(['updated_at' => Date::parse($updatedAt)])->saveQuietly();
     }
 
-    $testimonials = [
-        ['Old testimonial', TestimonialStatus::Rejected, '2026-08-19 08:00:00'],
-        ['Approved testimonial', TestimonialStatus::Approved, '2026-08-19 12:00:00'],
-        ['Pending testimonial', TestimonialStatus::Pending, '2026-08-19 14:00:00'],
-    ];
-
-    foreach ($testimonials as [$name, $status, $createdAt]) {
-        $testimonial = Testimonial::query()->create([
-            'name' => $name,
-            'body' => 'Testimonial body',
-            'status' => $status,
-        ]);
-
-        $testimonial->forceFill(['created_at' => Date::parse($createdAt)])->saveQuietly();
-    }
-
     livewire(RecentActivityWidget::class)
         ->assertSeeInOrder([
             'Draft post',
-            'Pending testimonial',
             'Published post',
-            'Approved testimonial',
             'Review post',
         ])
         ->assertSee('Published')
-        ->assertSee('Approved')
-        ->assertSee('Pending Review')
-        ->assertDontSee('Old post')
-        ->assertDontSee('Old testimonial');
+        ->assertSee('Draft')
+        ->assertDontSee('Old post');
 });

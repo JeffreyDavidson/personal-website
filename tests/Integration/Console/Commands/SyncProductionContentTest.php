@@ -65,6 +65,5 @@ function commandPublicContentArchiveFixture(): array
         'podcasts' => [],
         'episodes' => [],
         'videos' => [],
-        'testimonials' => [],
     ];
 }

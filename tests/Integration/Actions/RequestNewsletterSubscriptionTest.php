@@ -16,7 +16,8 @@ beforeEach(function () {
 });
 
 it('starts a pending newsletter subscription and queues its confirmation', function () {
-    app(RequestNewsletterSubscription::class)('Reader@Example.com');
+    app(RequestNewsletterSubscription::class)
+        ->handle('Reader@Example.com');
 
     $subscriber = Subscriber::query()->sole();
 
@@ -42,7 +43,8 @@ it('does not restart an active verified subscription', function () {
         'verified_at' => $verifiedAt,
     ]);
 
-    app(RequestNewsletterSubscription::class)('Reader@Example.com');
+    app(RequestNewsletterSubscription::class)
+        ->handle('Reader@Example.com');
 
     $subscriber->refresh();
 
@@ -61,7 +63,8 @@ it('restarts confirmation for an unsubscribed reader', function () {
         'unsubscribed_at' => now()->subWeek(),
     ]);
 
-    app(RequestNewsletterSubscription::class)('reader@example.com');
+    app(RequestNewsletterSubscription::class)
+        ->handle('reader@example.com');
 
     expect($subscriber->refresh()->subscribed_at?->isToday())->toBeTrue()
         ->and($subscriber->verified_at)->toBeNull()

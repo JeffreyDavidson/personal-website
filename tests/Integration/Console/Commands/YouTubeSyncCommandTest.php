@@ -1,5 +1,6 @@
 <?php
 
+use App\Data\YouTubeVideoData;
 use App\Models\Video;
 use App\Services\YouTubeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,17 +13,17 @@ it('creates new videos and forwards the requested limit', function () {
     $youtube = Double::for(YouTubeService::class);
     $youtube->expects('getChannelVideos')
         ->with(12)
-        ->returns([[
-            'youtube_id' => 'new-video',
-            'title' => 'A New Video',
-            'description' => 'New description',
-            'thumbnail_url' => 'https://example.com/new.jpg',
-            'duration' => 'PT8M30S',
-            'view_count' => 120,
-            'like_count' => 15,
-            'comment_count' => 4,
-            'published_at' => '2026-08-18T12:00:00Z',
-        ]]);
+        ->returns([new YouTubeVideoData(
+            youtubeId: 'new-video',
+            title: 'A New Video',
+            description: 'New description',
+            thumbnailUrl: 'https://example.com/new.jpg',
+            duration: 'PT8M30S',
+            viewCount: 120,
+            likeCount: 15,
+            commentCount: 4,
+            publishedAt: '2026-08-18T12:00:00Z',
+        )]);
     app()->instance(YouTubeService::class, $youtube);
 
     $this->artisanCommand('youtube:sync', ['--limit' => 12])
@@ -57,17 +58,17 @@ it('updates an existing video without replacing its publishing fields', function
     $youtube = Double::for(YouTubeService::class);
     $youtube->expects('getChannelVideos')
         ->with(50)
-        ->returns([[
-            'youtube_id' => 'existing-video',
-            'title' => 'Updated Title',
-            'description' => 'Updated description',
-            'thumbnail_url' => 'https://example.com/updated.jpg',
-            'duration' => 'PT10M',
-            'view_count' => 250,
-            'like_count' => 25,
-            'comment_count' => 5,
-            'published_at' => '2026-08-18T12:00:00Z',
-        ]]);
+        ->returns([new YouTubeVideoData(
+            youtubeId: 'existing-video',
+            title: 'Updated Title',
+            description: 'Updated description',
+            thumbnailUrl: 'https://example.com/updated.jpg',
+            duration: 'PT10M',
+            viewCount: 250,
+            likeCount: 25,
+            commentCount: 5,
+            publishedAt: '2026-08-18T12:00:00Z',
+        )]);
     app()->instance(YouTubeService::class, $youtube);
 
     $this->artisanCommand('youtube:sync')
@@ -87,39 +88,39 @@ it('updates an existing video without replacing its publishing fields', function
 
 it('creates stable unique slugs for colliding and empty titles', function () {
     $payloads = [
-        [
-            'youtube_id' => 'first-video',
-            'title' => 'Same Title',
-            'description' => null,
-            'thumbnail_url' => null,
-            'duration' => null,
-            'view_count' => 0,
-            'like_count' => 0,
-            'comment_count' => 0,
-            'published_at' => null,
-        ],
-        [
-            'youtube_id' => 'second-video',
-            'title' => 'Same Title',
-            'description' => null,
-            'thumbnail_url' => null,
-            'duration' => null,
-            'view_count' => 0,
-            'like_count' => 0,
-            'comment_count' => 0,
-            'published_at' => null,
-        ],
-        [
-            'youtube_id' => 'empty-title-video',
-            'title' => '!!!',
-            'description' => null,
-            'thumbnail_url' => null,
-            'duration' => null,
-            'view_count' => 0,
-            'like_count' => 0,
-            'comment_count' => 0,
-            'published_at' => null,
-        ],
+        new YouTubeVideoData(
+            youtubeId: 'first-video',
+            title: 'Same Title',
+            description: null,
+            thumbnailUrl: null,
+            duration: null,
+            viewCount: 0,
+            likeCount: 0,
+            commentCount: 0,
+            publishedAt: null,
+        ),
+        new YouTubeVideoData(
+            youtubeId: 'second-video',
+            title: 'Same Title',
+            description: null,
+            thumbnailUrl: null,
+            duration: null,
+            viewCount: 0,
+            likeCount: 0,
+            commentCount: 0,
+            publishedAt: null,
+        ),
+        new YouTubeVideoData(
+            youtubeId: 'empty-title-video',
+            title: '!!!',
+            description: null,
+            thumbnailUrl: null,
+            duration: null,
+            viewCount: 0,
+            likeCount: 0,
+            commentCount: 0,
+            publishedAt: null,
+        ),
     ];
 
     $youtube = Double::for(YouTubeService::class);
